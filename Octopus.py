@@ -2,9 +2,20 @@
 import pygame
 import math
 import utils
+import Projectile
 
+
+
+class InkJet(Projectile.projectile):
+    
+    def __init__(self, firer):
+        
+        Projectile.projectile.__init__(self, firer.rect.center, firer.angle, firer.speed[0] + 20, pygame.image.load('defaultProjectile.png'))
+        
+        
 
 class octopus(pygame.sprite.Sprite):
+    
     
     def __init__(self):
         
@@ -18,17 +29,22 @@ class octopus(pygame.sprite.Sprite):
         self.health = 3
         self.inkamount = 10
         self.score = 0
+        self.firerate = [0.2, 0.2] #seconds between each shot
         
         #Movement
         self.angle = 0
         self.turnrate = [40, 40]
-        self.turnpenalty = [1, 1]
+        self.turnpenalty = [3, 3]
         
         self.speed = [1,1]
         self.acceleration = 15
         self.maxspeed = 200
         self.minspeed = 1
-
+        
+        #InkJets
+        
+        self.InkJets = pygame.sprite.Group()
+               
     def turn(self, direction, deltatime): #Changing the angle and applying turn penalty. and rotating the sprite
         print direction
         
@@ -90,11 +106,39 @@ class octopus(pygame.sprite.Sprite):
         if self.rect.y < 0:
             
             self.rect.y +=720
+            
+    def update(self, keypressed, deltatime, display):
         
         
+        #=======================================================================
+        # TURNING DETECTION
+        #=======================================================================
+        if keypressed[pygame.K_a]: #A has been pressed so turn left
+            
+            direction = 'LEFT'
         
-    def update(self, direction, move, deltatime):
+        elif keypressed[pygame.K_d]: #A has been pressed to turn right
+            
+            direction = 'RIGHT'
+            
+        else: #No turning has happened
+            
+            direction = ''
         
+        #=======================================================================
+        # MOVING DETECTION
+        #=======================================================================
+        if keypressed[pygame.K_w]: #W has been pressed so go forward
+            
+            move = True
+        
+        else: #W hasn't been pressed so don't move at all
+            
+            move = False
+        
+        #=======================================================================
+        # APPLYING TURNING AND MOVEMENT
+        #=======================================================================
         if direction != '':
             
             self.turn(direction, deltatime)
@@ -107,15 +151,46 @@ class octopus(pygame.sprite.Sprite):
             self.move(deltatime)
             
         else:
-            #If they haven't moved reduce their speed
-            self.speed[0] = utils.chkmin(self.speed[0], -((self.acceleration*deltatime)/5), self.minspeed)
+            #Kill their speed, pulling them Gs
+            self.speed[0] = 0
+        
+        
+        self.draw(display)
+        
+        #=======================================================================
+        # CHECKING IF FIRED
+        #=======================================================================
+        
+        self.firerate[1] -= deltatime / 10 #Deltatime is in seconds * 10, so we divide by 10 to get seconds
+        
+        if keypressed[pygame.K_SPACE] and self.firerate[1] <= 0 and self.speed[0] > 0:
+            
+            self.fire()
+            self.firerate[1] = self.firerate[0]
+        
+        #=======================================================================
+        # OTHER UPDATES
+        #=======================================================================
+        
+        self.InkJets.update(deltatime, display)
+        
         #DEBUG
         print
         print 'DELTA TIME:' + str(deltatime)  
         print 'ANGLE ' + str(self.angle)
         print 'SPEED' + str(self.speed)
         
-    def draw(self):
+    def draw(self, display):
+        
+        display.blit(self.sprite, (self.rect.x, self.rect.y))
+
 
         pass #Needs to be written.
+        
+    def fire(self):
+        
+        Ink = InkJet(self)
+        self.InkJets.add(Ink)
+        print self.InkJets.sprites()
+        
         

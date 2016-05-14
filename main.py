@@ -4,6 +4,8 @@ import random
 import Octopus
 
 
+__version__ = '2.0.0'
+
 clock = pygame.time.Clock()
 display = pygame.display.set_mode((1280,720))
 backdrop = pygame.image.load('Backdrop.png').convert()
@@ -13,6 +15,8 @@ player = Octopus.octopus()
 
 #Game loop
 while True:
+    
+    display.blit(backdrop, (0,0))
     
     move = False
     direction = ''
@@ -37,25 +41,11 @@ while True:
     '''
     keypressed = pygame.key.get_pressed()
     
-    if keypressed[pygame.K_d]:
-        
-        direction = 'RIGHT'
-        
-    if keypressed[pygame.K_a]:
-        
-        direction = 'LEFT'
-        
-    if keypressed[pygame.K_w]:
-        
-        move = True
-        
-    player.update(direction, move, deltatime)
+    player.update(keypressed, deltatime, display)
     
     
-    display.blit(backdrop, (0,0))
     
-    #This needs to be reassigned to the octopus.draw()
-    display.blit(player.sprite, (player.rect.x, player.rect.y))
+  
     
     pygame.display.flip()
     
