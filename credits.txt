@@ -1,0 +1,14 @@
+Main game music:
+	Self made mix of:
+	
+	'Bit Quest' by Kevin Macleod.
+	and 
+	OceanWaves Creative Commons 3.0 Non Commercial - RGAP Creative http://www.rgapcreative.com
+		
+Sound Effects:
+
+	Collect Coin:
+		coin_2.wav soundnimja www.freesound.org
+		
+	Octopus fire:
+		laser fins www.freesound.org
