@@ -9,7 +9,7 @@ pygame.mixer.init() #Init the music module so that we can use it.
 pygame.font.init() #Init the font module so that we can use fonts
 
 #Setting up the font
-fontArcadeClassic = pygame.font.Font('joystix monospace.TTF', 30)
+fontArcadeClassic = pygame.font.Font('Assets/joystix monospace.TTF', 30)
 
 
 class octopus(pygame.sprite.Sprite):
@@ -20,7 +20,7 @@ class octopus(pygame.sprite.Sprite):
         pygame.sprite.Sprite.__init__(self)
         
         #Sprite and hit box
-        self.sprite = self.defaultsprite = pygame.image.load('8pi1.png')
+        self.sprite = self.defaultsprite = pygame.image.load('Assets/Art/8pi1.png')
         self.rect = self.sprite.get_rect()
         
         #Gameplay
@@ -43,7 +43,7 @@ class octopus(pygame.sprite.Sprite):
         self.InkJets = pygame.sprite.Group()
         
         #Sounds
-        self.fireSound = pygame.mixer.Sound('OctopusFire.ogg')
+        self.fireSound = pygame.mixer.Sound('Assets/Sounds/OctopusFire.ogg')
        
     def turn(self, direction, deltatime): #Changing the angle and applying turn penalty. and rotating the sprite
         

@@ -43,7 +43,7 @@ class InkPot(powerup):  #INKPOT POWERUP
     
     def __init__(self, player):
         
-        sprite = pygame.image.load('INKpot.png')
+        sprite = pygame.image.load('Assets/Art/INKpot.png')
         powerup.__init__(self, sprite, player)
         
         self.InkFillAmount = 10
@@ -70,7 +70,7 @@ class InkPots(pygame.sprite.Group): #INKPOT GROUP
         
         self.add(InkPot(self.player))
         
-        self.collectInkSound = pygame.mixer.Sound('Collect INK.ogg')
+        self.collectInkSound = pygame.mixer.Sound('Assets/Sounds/Collect INK.ogg')
         
     def update(self, display):
         
@@ -87,7 +87,7 @@ class Coin(powerup):
  
     def __init__(self, player):
         
-        sprite = pygame.image.load('coin.png')
+        sprite = pygame.image.load('Assets/Art/coin.png')
         powerup.__init__(self, sprite, player)
         
         self.scoreincrease = 10
@@ -112,7 +112,7 @@ class Coins(pygame.sprite.Group):
         pygame.sprite.Group.__init__(self)
         self.player = player
         
-        self.collectCoinSound = pygame.mixer.Sound('Collect coin.ogg')
+        self.collectCoinSound = pygame.mixer.Sound('Assets/Sounds/Collect coin.ogg')
         
         self.coinamount = 1
         

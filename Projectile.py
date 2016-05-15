@@ -60,5 +60,5 @@ class InkJet(projectile): #INKJET PROJECTILE
                             firer.rect.center, 
                             firer.angle, 
                             (firer.speed[0] * 1.5) + 20, 
-                            pygame.image.load('defaultProjectile.png'))
+                            pygame.image.load('Assets/Art/defaultProjectile.png'))
         

@@ -12,7 +12,7 @@ pygame.mixer.init() #Init the music package so that we can use it
 
 clock = pygame.time.Clock()
 display = pygame.display.set_mode((1280,720))
-backdrop = pygame.image.load('Backdrop.png').convert()
+backdrop = pygame.image.load('Assets/Art/Backdrop.png').convert()
     
 
 player = Octopus.octopus()
@@ -22,7 +22,7 @@ Coins = Powerup.Coins(player)
 
 def loadandplaymusic():
     
-    pygame.mixer.music.load('Main game music.ogg')
+    pygame.mixer.music.load('Assets/Sounds/Main game music.ogg')
     pygame.mixer.music.play(-1, 0) 
 
 def updatepowerups():
