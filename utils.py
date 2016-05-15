@@ -1,6 +1,7 @@
 #This contains odd functions that are used sometimes
 import pygame
 
+pygame.init()
 
 
 def changeangle(originalangle, amountofchange): #This is an angle function to calculate the change in angle. It handles going above 360 and below 0
