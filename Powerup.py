@@ -116,7 +116,7 @@ class Coins(pygame.sprite.Group):
         
         self.coinamount = 1
         
-        for i in range(self.coinamount):
+        for _ in range(self.coinamount):
             
             self.add(Coin(self.player))
             
