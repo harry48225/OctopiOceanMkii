@@ -1,13 +1,15 @@
 #===============================================================================
-# This is the projectile module. It contains all of the classed to do with
+# This is the projectile module. It contains most of the classes to do with
 # projectiles.
 #===============================================================================
 
 import pygame 
 import math
 #parent projectile class
-
-
+pygame.init()
+#===============================================================================
+# PARENT PROJECTILE
+#===============================================================================
 class projectile(pygame.sprite.Sprite):
     
     def __init__(self, firercenter, angle, speed, sprite):
@@ -27,8 +29,15 @@ class projectile(pygame.sprite.Sprite):
         
     def update(self, deltatime, display):
         
-        self.move(deltatime)
-        self.draw(display)
+        if any([self.rect.x > 1280, #If the projectile goes off screen,
+               self.rect.y > 720,  # Kill it!!!!
+               self.rect.x < 0, 
+               self.rect.y < 0]):
+            self.kill()
+        else:
+            
+            self.move(deltatime)
+            self.draw(display)
         
         pass
     
@@ -42,8 +51,14 @@ class projectile(pygame.sprite.Sprite):
     def draw(self, display):
         
         display.blit(self.sprite, (self.rect.x, self.rect.y))
+
+class InkJet(projectile): #INKJET PROJECTILE
     
+    def __init__(self, firer):
         
-        
-        
+        projectile.__init__(self, 
+                            firer.rect.center, 
+                            firer.angle, 
+                            (firer.speed[0] * 1.5) + 20, 
+                            pygame.image.load('defaultProjectile.png'))
         
