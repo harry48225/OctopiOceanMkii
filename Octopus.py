@@ -3,16 +3,14 @@ import pygame
 import math
 import utils
 import Projectile
+pygame.mixer.pre_init(44100, -16, 1, 1024)
+pygame.init()
+pygame.mixer.init() #Init the music module so that we can use it.
+pygame.font.init() #Init the font module so that we can use fonts
 
+#Setting up the font
+fontArcadeClassic = pygame.font.Font('joystix monospace.TTF', 30)
 
-
-class InkJet(Projectile.projectile):
-    
-    def __init__(self, firer):
-        
-        Projectile.projectile.__init__(self, firer.rect.center, firer.angle, firer.speed[0] + 20, pygame.image.load('defaultProjectile.png'))
-        
-        
 
 class octopus(pygame.sprite.Sprite):
     
@@ -37,16 +35,17 @@ class octopus(pygame.sprite.Sprite):
         self.turnpenalty = [3, 3]
         
         self.speed = [1,1]
-        self.acceleration = 15
-        self.maxspeed = 200
+        self.acceleration = 10
+        self.maxspeed = 100
         self.minspeed = 1
         
         #InkJets
-        
         self.InkJets = pygame.sprite.Group()
-               
+        
+        #Sounds
+        self.fireSound = pygame.mixer.Sound('OctopusFire.ogg')
+       
     def turn(self, direction, deltatime): #Changing the angle and applying turn penalty. and rotating the sprite
-        print direction
         
         self.turnrate[1] = float(self.turnrate[0] * deltatime) #Accounting for deltatime
         
@@ -86,9 +85,9 @@ class octopus(pygame.sprite.Sprite):
         self.speed[1] = self.speed[0] * deltatime #Updating needed variable for Deltatime
 
             
-        radians = math.radians(self.angle + 90)
-        self.rect.x += math.cos(radians) * self.speed[1]
-        self.rect.y -= math.sin(radians) * self.speed[1]
+        radians = float(math.radians(self.angle + 90))
+        self.rect.x += float(math.cos(radians) * self.speed[1])
+        self.rect.y -= float(math.sin(radians) * self.speed[1])
        
         #Moving off the screen logic
         if self.rect.x > 1280:
@@ -155,15 +154,13 @@ class octopus(pygame.sprite.Sprite):
             self.speed[0] = 0
         
         
-        self.draw(display)
-        
         #=======================================================================
         # CHECKING IF FIRED
         #=======================================================================
         
         self.firerate[1] -= deltatime / 10 #Deltatime is in seconds * 10, so we divide by 10 to get seconds
         
-        if keypressed[pygame.K_SPACE] and self.firerate[1] <= 0 and self.speed[0] > 0:
+        if keypressed[pygame.K_SPACE] and self.firerate[1] <= 0 and self.speed[0] > 0 and self.inkamount > 0:
             
             self.fire()
             self.firerate[1] = self.firerate[0]
@@ -174,6 +171,20 @@ class octopus(pygame.sprite.Sprite):
         
         self.InkJets.update(deltatime, display)
         
+        #=======================================================================
+        # DRAW SELF
+        #=======================================================================
+        
+        self.draw(display)
+        
+        #=======================================================================
+        # DRAW STATS
+        #=======================================================================
+        
+        self.drawstats(display)
+
+        
+        
         #DEBUG
         print
         print 'DELTA TIME:' + str(deltatime)  
@@ -182,15 +193,31 @@ class octopus(pygame.sprite.Sprite):
         
     def draw(self, display):
         
-        display.blit(self.sprite, (self.rect.x, self.rect.y))
+        display.blit(self.sprite, (float(self.rect.x), float(self.rect.y)))
 
 
         pass #Needs to be written.
         
     def fire(self):
         
-        Ink = InkJet(self)
+        self.fireSound.play()
+        Ink = Projectile.InkJet(self)
         self.InkJets.add(Ink)
-        print self.InkJets.sprites()
         
+        self.inkamount -= 1
         
+    def drawstats(self, display):
+        
+        #=======================================================================
+        # DRAWING INKAMOUNT
+        #=======================================================================
+        inkamountstring = 'INK amount: {0}'.format(self.inkamount)
+        renderedinkamount = fontArcadeClassic.render(inkamountstring, 0, (255,255,255))
+        display.blit(renderedinkamount, (0, 660))
+        
+        #=======================================================================
+        # DRAWING SCORE
+        #=======================================================================
+        scorestring = 'SCORE: {0}'.format(self.score)
+        renderedscore = fontArcadeClassic.render(scorestring, 0, (255,255,255))
+        display.blit(renderedscore, (0,0))
